@@ -66,7 +66,8 @@ class patientList{
         patient temp = head;
         while (temp.next != null && temp.next.id != id){
             temp = temp.next;
-        }
+        }//after the cycle;
+        // temp.next.id == id so cycle broke and message will be writing
         //final message
         if (temp.next == null) {
             System.out.println("Patient with id " + id + " not found!");
@@ -79,7 +80,6 @@ class patientList{
         patient temp = head;
         while(temp != null){
             System.out.println("-------------");
-
             System.out.println(temp.id + " " + temp.name + " " + temp.severity + " " + temp.age + " ");
             temp = temp.next;
         }
