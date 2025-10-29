@@ -8,12 +8,17 @@ public static void main (String[] args){
     patient.addPatient(4,"Ayşe",3,23);
     patient.addPatient(5,"Fatma",6,60);
 
-    patient.removePatient(3);
-//    that is not an obligation but i want to try to remove someone randomly
-//    patient.removePatient((int) Math.random()*5);
-
     //printing results
     patient.printList();
+    System.out.println("");
+    // removing one by id
+    patient.removePatient(1); //first one
+    patient.removePatient(3); //middle one
+    patient.removePatient(5); //last one
+    System.out.println("");
+    // searching one by id
+    patient.findPatient(4);
+
 
 }
 
