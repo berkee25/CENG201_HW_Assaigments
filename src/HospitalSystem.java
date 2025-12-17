@@ -16,7 +16,7 @@ class HashMap<K, V> {
 
     //HASHTABLE, we always choose the size of it AS A PRIME NUMBER
     // since prime number provides us mor randomness
-    private int size; //It holds the number of indexes that the hash table will consist of.
+    private int size ; //It holds the number of indexes that the hash table will consist of.
 
     private Node[] Hashtable; //The type of the hashtable array must be Node[].
 
@@ -56,10 +56,10 @@ class HashMap<K, V> {
     }
 
     public V get(K key) {  //find
-        int index = hash(key);
-        Node head = Hashtable[index];
+        int index = hash(key); // keep the value
+        Node head = Hashtable[index]; // assaign value to head
 
-        while (head != null) {
+        while (head != null) { //search
             if (head.key.equals(key)) {
                 return head.value;
             }
@@ -84,51 +84,63 @@ class HashMap<K, V> {
         }
     }
 }
-class HospitalSystem{
+class HospitalSystem {
 
-    private patientList admittedPatients;         // Inpatients  //A patientList object that stores all patients currently admitted in the hospital.
-    private TreatmentQueue waitingQueue;         // Queue for pending treatment requests //A queue (FIFO) that stores treatment requests using linked-list nodes (TreatmentRequest).
-    private DisChargeStack dischargedPatients;  // Discharged patient records //A stack structure containing patients who have been discharged. //LIFO behavior
+    private patientList admittedPatients; // Inpatients
+    private TreatmentQueue waitingQueue;  // Queue for pending treatment requests
+    private DisChargeStack dischargedPatients;  // Discharged patient records (LIFO)
 
-    HashMap<Integer, patient> lookup;
+    private HashMap<Integer, patient> lookup;
     //The reason I created a generic hashtable like the one above is so that I can run this line because it is requested in the given direction.
-
     HospitalSystem() {
-        this.admittedPatients = new patientList();
-        this.waitingQueue = new TreatmentQueue();
-        this.dischargedPatients = new DisChargeStack();
-        this.lookup = new HashMap<>(10);
+        admittedPatients = new patientList();
+        waitingQueue = new TreatmentQueue();
+        dischargedPatients = new DisChargeStack();
+        lookup = new HashMap<>(13);
     }
-
     // 1.Adding new patient in the system
     public void addNewPatient(patient p) {
         admittedPatients.addPatient(p.id, p.name, p.severity, p.age);
-        lookup.put(p.id, p); // Adds the new patient into the HashMap. //Time complexity is (O(1)) searching by ID.
-        System.out.println("SYSTEM: Patient " + p.id + " registered and mapped.");
+        lookup.put(p.id, p);// Adds the new patient into the HashMap. //Time complexity is (O(1)) searching by ID.
+        System.out.println("Patient " + p.id + " added.");
     }
 
-    // 2.Adding treatment request to the queue
-    public void addWaitingRequest(int patientId) {
-//        patient p = lookup.get(patientId); //Is there a patient with ID → Check from Lookup
-//
-//        if (p == null) {
-//            System.out.println("SYSTEM ERROR: Patient ID " + patientId + " not found in the system.");
-//        }
-//
-//        TreatmentRequest request = new TreatmentRequest(patientId);
-//        //we create a object to get id from queue
-//        waitingQueue.enqueue(request);
-//        System.out.println("SYSTEM: Treatment request for Patient " + patientId + " added to the queue.");
+    public void addTreatmentRequest(int patientId) {
+        if (lookup.get(patientId) == null) {
+            System.out.println("ERROR → Patient not found: " + patientId);
+        }
+        TreatmentRequest request = new TreatmentRequest(patientId);
+        waitingQueue.enqueue(request);
+        System.out.println("SYSTEM → Treatment request added for " + patientId);
+    }
+    // 3. Add discharge record
+    public void addDischargeRecord(int patientId) {
+        if (lookup.get(patientId) == null) {
+            System.out.println("ERROR → Patient not found: " + patientId);
+        }
+        dischargedPatients.push(new DisChargeRecord(patientId));
+        System.out.println("SYSTEM → Discharge record added for Patient " + patientId);
     }
 
-    // 3.Adding discharge record
-    public void addDischargeRequest(int patientId) {
-        DisChargeRecord record = new DisChargeRecord(patientId);
 
-        dischargedPatients.push(record);
-        System.out.println("SYSTEM: Discharge record for Patient " + patientId + " added to the stack.");
+    public void processTreatment() {
+        if (waitingQueue.isEmpty()) {
+            System.out.println("SYSTEM → No requests to process");
+        }
+        int patientId = waitingQueue.dequeue();
+        dischargedPatients.push(new DisChargeRecord(patientId));
+        System.out.println("SYSTEM → Patient treated & discharged: " + patientId);
+    }
+
+    public void printSystemState() {
+        System.out.println("\n--- CURRENT SYSTEM STATE ---");
+        System.out.println("Patients:");
+        admittedPatients.printList();
+        System.out.println("Discharged:");
+        dischargedPatients.printStack();
     }
 }
+
 
 //The diamond operator (<>) is used with generics to avoid repeating the type on the right-hand side of an assignment.
 
