@@ -18,11 +18,11 @@ class HashMap<K, V> {
     // since prime number provides us mor randomness
     private int size ; //It holds the number of indexes that the hash table will consist of.
 
-    private Node[] Hashtable; //The type of the hashtable array must be Node[].
+    private Object[] Hashtable; //The type of the hashtable array must be Node[].
 
     HashMap(int size) {
         this.size = size;
-        this.Hashtable = (Node[]) new Object[size];//the assaigments wants that create a generic hash table so we use that
+        this.Hashtable = new Object[size];//the assaigments wants that create a generic hash table so we use that
         //if we use int key and int value not generic type of hash table we can use this.table = new Node[size];
     }
 
@@ -32,7 +32,7 @@ class HashMap<K, V> {
 
     public void put(K key, V value) {
         int index = hash(key); // an index between 0-12
-        Node head = Hashtable[index];//head  is the first element of the linked list in that index
+        Node head = (Node) Hashtable[index];//head  is the first element of the linked list in that index
 
         if (head == null) {
             //if table is empty insert key in the table
@@ -57,7 +57,7 @@ class HashMap<K, V> {
 
     public V get(K key) {  //find
         int index = hash(key); // keep the value
-        Node head = Hashtable[index]; // assaign value to head
+        Node head = (Node) Hashtable[index]; // assaign value to head
 
         while (head != null) { //search
             if (head.key.equals(key)) {
@@ -70,7 +70,7 @@ class HashMap<K, V> {
 
     public void remove(K key) {
         int index = hash(key);
-        Node head = Hashtable[index];
+        Node head = (Node) Hashtable[index];
         Node prev = null;
 
         while (head != null) {
