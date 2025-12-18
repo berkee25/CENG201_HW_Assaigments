@@ -102,14 +102,15 @@ class HospitalSystem {
     public void addNewPatient(patient p) {
         admittedPatients.addPatient(p.id, p.name, p.severity, p.age);
         lookup.put(p.id, p);// Adds the new patient into the HashMap. //Time complexity is (O(1)) searching by ID.
-        System.out.println("Patient " + p.id + " added.");
     }
 
-    public void addTreatmentRequest(int patientId) {
+    public void addTreatmentRequest(int patientId) { //The purpose of the method is to create a treatment request for a patient when the patient ID is given and to store it in the queue.
         if (lookup.get(patientId) == null) {
             System.out.println("ERROR → Patient not found: " + patientId);
         }
-        TreatmentRequest request = new TreatmentRequest(patientId);
+        boolean isPriority = (lookup.get(patientId).severity >= 5); // Determine priority based on severity
+        TreatmentRequest request = new TreatmentRequest(patientId,isPriority);
+        //So the parameter of the enqueue method must be a TreatmentRequest object. Just sending the patientId is not enough, because both the ID and time information are stored in the queue!!
         waitingQueue.enqueue(request);
         System.out.println("SYSTEM → Treatment request added for " + patientId);
     }
@@ -127,16 +128,19 @@ class HospitalSystem {
         if (waitingQueue.isEmpty()) {
             System.out.println("SYSTEM → No requests to process");
         }
+        //remove patients from queue (priority patients first)
         int patientId = waitingQueue.dequeue();
+        //then delete the patient record because the treatment has ended
+        admittedPatients.removePatient(patientId);
+        //move to discharge stack
         dischargedPatients.push(new DisChargeRecord(patientId));
-        System.out.println("SYSTEM → Patient treated & discharged: " + patientId);
+        System.out.println("SYSTEM → Patient " + patientId + " processed and moved to discharge stack.");
     }
 
     public void printSystemState() {
-        System.out.println("\n--- CURRENT SYSTEM STATE ---");
-        System.out.println("Patients:");
+        System.out.println("\n--- CURRENT HOSPITAL SYSTEM STATE ---");
         admittedPatients.printList();
-        System.out.println("Discharged:");
+        waitingQueue.printQueue();
         dischargedPatients.printStack();
     }
 }

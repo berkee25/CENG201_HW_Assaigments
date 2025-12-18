@@ -43,13 +43,14 @@ class DisChargeStack {
         System.out.println("TOP Discharge → Patient ID: " + top.patientID);
         return top.patientID; // returning patient id
     }
+
     public void printStack(){
         DisChargeRecord temp = top; // node named temp stores top value
         if(isEmpty()){
             System.out.println("Stack is empty!");
         }
-        while (temp != null) {
-            System.out.println("Patient ID: "+temp.patientID + " ");
+        while (temp != null) { // traverse the stack
+            System.out.println("Patient ID: "+temp.patientID + " "); //print stack and the message
             temp = temp.next;
         }
         System.out.println();
