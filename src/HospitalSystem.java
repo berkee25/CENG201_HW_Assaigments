@@ -137,6 +137,49 @@ class HospitalSystem {
         System.out.println("SYSTEM → Patient " + patientId + " processed and moved to discharge stack.");
     }
 
+    public void bubbleSearch() {
+        //1. check list is empty or not
+        if (admittedPatients.head == null) {
+            System.out.println("No admitted patients.");
+        }
+        // add a counter to find length of list
+        int count = 0;
+        patient temp = admittedPatients.head;
+        //traverse the list
+        while (temp != null) {
+            count++;
+            temp = temp.next;
+        }
+        // create a array
+        patient[] patients = new patient[count];
+
+        // Linked list → array
+        temp = admittedPatients.head;
+        int k = 0;
+        while (temp != null) {
+            patients[k++] = temp;
+            temp = temp.next;
+        }
+
+        // Bubble sort (order by severity)
+        for (int i = patients.length - 1; i > 0 ; i--) {
+            for (int j = 0; j < i ; j++) {
+
+                if (patients[j].severity > patients[j + 1].severity) {
+                    patient swap = patients[j];
+                    patients[j] = patients[j + 1];
+                    patients[j + 1] = swap;
+                }
+            }
+        }
+        //print ordered list
+        System.out.println("\nPATIENTS SORTED BY SEVERITY (LOW → HIGH)");
+        for (patient p : patients) {
+            System.out.println(p.name + " - Severity: " + p.severity);
+        }
+
+       }
+
     public void printSystemState() {
         System.out.println("\n--- CURRENT HOSPITAL SYSTEM STATE ---");
         admittedPatients.printList();

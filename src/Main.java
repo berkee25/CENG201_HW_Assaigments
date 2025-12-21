@@ -114,6 +114,12 @@ public static void main (String[] args){
     hospitalSystem.processTreatment();
 
     hospitalSystem.printSystemState();
+
+    System.out.println();
+    System.out.println("Sorted severity by bubble sort: ");
+    hospitalSystem.bubbleSearch();
+
+
 }
 
 // For making comments Use this Shortcut -> CTRL + K + C
